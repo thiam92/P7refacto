@@ -1,0 +1,33 @@
+<div class="card mt-4">
+    <div class="card-header">
+        <img class="img-round" [src]="post.user.avatar_url" [alt]="post.user | avatarAlt">
+        <span class="card-title ms-2" title="{{ post.user.user_name +  ' ' + post.user.last_name }}">{{ post.user.user_name }}</span>
+        <p class="card-text time-tag"><small>{{ post.createdAt | timeAgo }}</small></p>
+    </div>
+    <div class="card-body">
+         <p class="card-text lh-sm">{{ post.content }}</p>
+    </div>
+    <img class="card-img-bottom" 
+        *ngIf="post.post_image_url" [src]="post.post_image_url" alt="Image de publication">
+
+    <div class="card-footer">
+        <div class="footer-content">
+            <div>
+                <button class="btn btn-secondary me-2" 
+                    (click)="onModifyPost(post.uuid)" *ngIf="canUpdate(post.user_uuid)">Modifier</button>
+                <button class="btn btn-primary" 
+                (click)="onDeletePost()" *ngIf="canUpdate(post.user_uuid)">Supprimer</button>
+            </div>
+            <div class="like-buttons" *ngIf="!likeInProgress">
+                <i class="bi bi-hand-thumbs-up-fill like-icon" title="j'aime"
+                    (click)="onLikeAction()" [ngClass]="{ 'liked': liked }"></i>
+                <span *ngIf="likes">{{ likes }}</span>
+            </div>
+            <app-bs-spinner *ngIf="likeInProgress"></app-bs-spinner>
+            
+            
+        </div>
+    </div>
+</div>
+
+<app-error-panel *ngIf="errorMessage" errorMessage="{{ errorMessage }}"></app-error-panel>
